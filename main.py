@@ -3,6 +3,7 @@ import streamlit as st
 import json
 from groq import Groq
 from email_service import send_email  # Import the email service
+from datetime import datetime
 
 
 # Initialize Groq client with your API key
