@@ -3,10 +3,7 @@ import streamlit as st
 import json
 from groq import Groq
 from email_service import send_email  # Import the email service
-from dotenv import load_dotenv
 
-# Load environment variables from .env file
-load_dotenv()
 
 # Initialize Groq client with your API key
 # client = Groq(api_key=os.getenv("GROQ_API_KEY"))
