@@ -7,7 +7,7 @@ from email_service import send_email  # Import the email service
 from datetime import datetime
 
 # Initialize Groq client with your API key
-client = Groq(api_key="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")
+client = Groq(api_key=st.secrets["GROQ_API_KEY"])
 
 # Set page configuration to wide layout
 st.set_page_config(page_title="Place Info with Groq", page_icon="🗺️", layout="wide")
