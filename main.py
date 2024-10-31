@@ -1,16 +1,16 @@
 import os
+import pytz
 import streamlit as st
 import json
 from groq import Groq
 from email_service import send_email  # Import the email service
 from datetime import datetime
-import pytz
-
 
 # Initialize Groq client with your API key
-# client = Groq(api_key=os.getenv("GROQ_API_KEY"))
+client = Groq(api_key="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")
 
-client = Groq(api_key=st.secrets["GROQ_API_KEY"])
+# Set page configuration to wide layout
+st.set_page_config(page_title="Place Info with Groq", page_icon="🗺️", layout="wide")
 
 # Hide the Streamlit header and footer
 st.markdown("""
@@ -21,7 +21,7 @@ st.markdown("""
     
     /* Background Image */
     body {
-        background-image: url('your_background_image_url_here'); /* Add your background image URL */
+        background-image: url('https://user-images.githubusercontent.com/35409648/74775140-0373ab80-528d-11ea-8acd-9499c85a697f.gif'); /* Add your background image URL */
         background-size: cover;
         background-repeat: no-repeat;
         animation: backgroundAnimation 30s infinite alternate;
@@ -50,6 +50,8 @@ st.markdown("""
 st.title("Get Information About Any Place 🗺️")
 st.write("Enter the name of a place to get interesting details about it.")
 
+# Function to generate greeting based on the time of day
+# Function to generate greeting based on the user's time zone
 def get_greeting():
     # Get the current time in the user's time zone
     tz = pytz.timezone("Asia/Kolkata")
@@ -68,46 +70,9 @@ def get_greeting():
         greeting = "Good Night"
 
     return f"{greeting}, Happy {current_day}!"
-# def get_greeting():
-#     current_time = datetime.now()
-#     current_hour = current_time.hour
-#     current_day = current_time.strftime("%A")
-
-#     # Determine greeting based on current hour
-#     if 5 <= current_hour < 12:
-#         greeting = "Good Morning"
-#     elif 12 <= current_hour < 17:
-#         greeting = "Good Afternoon"
-#     elif 17 <= current_hour < 21:
-#         greeting = "Good Evening"
-#     else:
-#         greeting = "Good Night"
-
-#     return f"{greeting}, Happy {current_day}!"
 
 # Display greeting
 st.markdown(f"<h3 style='color:orange;'>{get_greeting()}</h3>", unsafe_allow_html=True)
-
-# # Function to generate greeting based on the time of day
-# def get_greeting():
-#     current_time = datetime.now()
-#     current_hour = current_time.hour
-#     current_day = current_time.strftime("%A")
-
-#     # Determine greeting based on current hour
-#     if 5 <= current_hour < 12:
-#         greeting = "Good Morning"
-#     elif 12 <= current_hour < 17:
-#         greeting = "Good Afternoon"
-#     elif 17 <= current_hour < 21:
-#         greeting = "Good Evening"
-#     else:
-#         greeting = "Good Night"
-
-#     return f"{greeting}, Happy {current_day}!"
-
-# # Display greeting
-# st.markdown(f"<h3 style='color:orange;'>{get_greeting()}</h3>", unsafe_allow_html=True)
 
 # User Input with Typing Animation
 placeholder_text = "Hy Boss, type here !!!"
