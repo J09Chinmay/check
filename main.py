@@ -52,7 +52,7 @@ st.write("Enter the name of a place to get interesting details about it.")
 
 def get_greeting():
     # Get the current time in the user's time zone
-    tz = pytz.timezone("UTC")
+    tz = pytz.timezone("Asia/Kolkata")
     current_time = datetime.now(tz)
     current_hour = current_time.hour
     current_day = current_time.strftime("%A")
