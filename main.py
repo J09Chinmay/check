@@ -10,42 +10,79 @@ from email_service import send_email  # Import the email service
 
 client = Groq(api_key=st.secrets["GROQ_API_KEY"])
 
-
-# Initialize Groq client with your API key
-# client = Groq(api_key="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")
-
-# Set page configuration
-st.set_page_config(page_title="Place Info with Groq", page_icon="🗺️")
-
 # Hide the Streamlit header and footer
 st.markdown("""
     <style>
     /* Hide header and footer */
     header {visibility: hidden;}
     footer {visibility: hidden;}
+    
+    /* Background Image */
+    body {
+        background-image: url('your_background_image_url_here'); /* Add your background image URL */
+        background-size: cover;
+        background-repeat: no-repeat;
+        animation: backgroundAnimation 30s infinite alternate;
+    }
+
+    /* Keyframes for Animation */
+    @keyframes backgroundAnimation {
+        0% { opacity: 1; }
+        100% { opacity: 0.7; } /* Adjust opacity for the animation effect */
+    }
+
+    /* Container styling */
+    .container {
+        width: 90%;
+        margin: auto;
+        background-color: rgba(255, 255, 255, 0.8); /* Semi-transparent white background */
+        padding: 20px;
+        border-radius: 8px;
+        box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    }
     </style>
     """, unsafe_allow_html=True)
 
 # Title and Description
+# st.markdown("<div class='container'>", unsafe_allow_html=True)  # Start of container
 st.title("Get Information About Any Place 🗺️")
 st.write("Enter the name of a place to get interesting details about it.")
 
-# User Input
-place_name = st.text_input("Enter Place Name")
+# Function to generate greeting based on the time of day
+def get_greeting():
+    current_time = datetime.now()
+    current_hour = current_time.hour
+    current_day = current_time.strftime("%A")
+
+    # Determine greeting based on current hour
+    if 5 <= current_hour < 12:
+        greeting = "Good Morning"
+    elif 12 <= current_hour < 17:
+        greeting = "Good Afternoon"
+    elif 17 <= current_hour < 21:
+        greeting = "Good Evening"
+    else:
+        greeting = "Good Night"
+
+    return f"{greeting}, Happy {current_day}!"
+
+# Display greeting
+st.markdown(f"<h3 style='color:orange;'>{get_greeting()}</h3>", unsafe_allow_html=True)
+
+# User Input with Typing Animation
+placeholder_text = "Hy Boss, type here !!!"
+place_name = st.text_input("Enter Place Name", placeholder=placeholder_text)
 
 # Function to get details from Groq with different questions
 def get_place_details(place):
-    # Define questions for different aspects
     questions = {
         "historical_facts": f"Tell me about the historical significance of {place}.",
         "attractions": f"What are the main attractions in {place}?",
         "famous_places": f"Which famous places should I not miss in {place}?",
         "unique_information": f"Share some unique information about {place}."
     }
-    # Dictionary to hold the results
     place_info = {"place": place}
 
-    # Loop through questions and store responses
     for field, question in questions.items():
         response = client.chat.completions.create(
             messages=[{"role": "user", "content": question}],
@@ -60,21 +97,15 @@ if st.button("Get Details"):
     if place_name:
         with st.spinner("Fetching details..."):
             try:
-                # Get detailed info and store it in JSON format
                 details = get_place_details(place_name)
                 st.success("Here are the details:")
                 
-                # Display simple text details for user
-                # st.write(f"**Historical Facts**: {details['historical_facts']}")
-                # st.write(f"**Attractions**: {details['attractions']}")
-                # st.write(f"**Famous Places**: {details['famous_places']}")
-                # st.write(f"**Unique Information**: {details['unique_information']}")
                 # Display details with styled headers for the user
                 st.markdown(f"<span style='font-weight:bold; color:orange;'>Historical Facts</span>: {details['historical_facts']}", unsafe_allow_html=True)
                 st.markdown(f"<span style='font-weight:bold; color:orange;'>Attractions</span>: {details['attractions']}", unsafe_allow_html=True)
                 st.markdown(f"<span style='font-weight:bold; color:orange;'>Famous Places</span>: {details['famous_places']}", unsafe_allow_html=True)
                 st.markdown(f"<span style='font-weight:bold; color:orange;'>Unique Information</span>: {details['unique_information']}", unsafe_allow_html=True)
-                # Convert details to JSON in memory (no file saved)
+                
                 json_data = json.dumps(details)
 
                 # HTML content for the email
@@ -143,17 +174,15 @@ if st.button("Get Details"):
                 
                 subject = f"Place Info Request: {place_name}"
                 
-                # Send email with the HTML content (detailed formatting)
-                send_email(subject, html_content)
+                # Send email with the HTML content
+                # send_email(subject, html_content)
 
-                # Provide download link for JSON data without saving to file
-                st.download_button("Download Details as JSON", data=json_data, file_name=f"{place_name}_details.json", mime="application/json")
-                
             except Exception as e:
                 st.error(f"Error fetching details: {e}")
-    else:
-        st.warning("Please enter a place name.")
+
+# Close the container
+st.markdown("</div>", unsafe_allow_html=True)  # End of container
 
 # Footer
 st.markdown("---")
-st.write("Made with ❤️ using Streamlit and Groq")
+st.write("Made with ❤️ using Streamlit and Groq By Chinmay Jena")
