@@ -4,6 +4,7 @@ import json
 from groq import Groq
 from email_service import send_email  # Import the email service
 from datetime import datetime
+import pytz
 
 
 # Initialize Groq client with your API key
@@ -49,9 +50,10 @@ st.markdown("""
 st.title("Get Information About Any Place 🗺️")
 st.write("Enter the name of a place to get interesting details about it.")
 
-# Function to generate greeting based on the time of day
 def get_greeting():
-    current_time = datetime.now()
+    # Get the current time in the user's time zone
+    tz = pytz.timezone("UTC")
+    current_time = datetime.now(tz)
     current_hour = current_time.hour
     current_day = current_time.strftime("%A")
 
@@ -66,9 +68,46 @@ def get_greeting():
         greeting = "Good Night"
 
     return f"{greeting}, Happy {current_day}!"
+# def get_greeting():
+#     current_time = datetime.now()
+#     current_hour = current_time.hour
+#     current_day = current_time.strftime("%A")
+
+#     # Determine greeting based on current hour
+#     if 5 <= current_hour < 12:
+#         greeting = "Good Morning"
+#     elif 12 <= current_hour < 17:
+#         greeting = "Good Afternoon"
+#     elif 17 <= current_hour < 21:
+#         greeting = "Good Evening"
+#     else:
+#         greeting = "Good Night"
+
+#     return f"{greeting}, Happy {current_day}!"
 
 # Display greeting
 st.markdown(f"<h3 style='color:orange;'>{get_greeting()}</h3>", unsafe_allow_html=True)
+
+# # Function to generate greeting based on the time of day
+# def get_greeting():
+#     current_time = datetime.now()
+#     current_hour = current_time.hour
+#     current_day = current_time.strftime("%A")
+
+#     # Determine greeting based on current hour
+#     if 5 <= current_hour < 12:
+#         greeting = "Good Morning"
+#     elif 12 <= current_hour < 17:
+#         greeting = "Good Afternoon"
+#     elif 17 <= current_hour < 21:
+#         greeting = "Good Evening"
+#     else:
+#         greeting = "Good Night"
+
+#     return f"{greeting}, Happy {current_day}!"
+
+# # Display greeting
+# st.markdown(f"<h3 style='color:orange;'>{get_greeting()}</h3>", unsafe_allow_html=True)
 
 # User Input with Typing Animation
 placeholder_text = "Hy Boss, type here !!!"
